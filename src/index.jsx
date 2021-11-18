@@ -23,7 +23,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = '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';
+  const token = process.env.REACT_APP_GITHUB_PERSONAL_TOKEN;
   // return the headers to the context so httpLink can read them
   return {
     headers: {
