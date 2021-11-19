@@ -1,7 +1,10 @@
 // vedors
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery, gql } from '@apollo/client';
+
+// styles
+import 'projects/styles/projects.styles.scss';
 
 const REPOSITORIES_QUERY = gql`
   query MyRepositories ($first: Int!){
@@ -11,6 +14,7 @@ const REPOSITORIES_QUERY = gql`
         nodes {
           id
           name
+          viewerHasStarred
           stargazers {
             totalCount
           }
@@ -50,53 +54,39 @@ const REMOVE_START = gql`
 
 const Projects = () => {
   const [first, setFirst] = useState(1);
-  const [starrableId, setStarrableId] = useState();
-  const [starrableIdRemove, setStarrableIdRemove] = useState();
-  const { data, loading, refetch } = useQuery(REPOSITORIES_QUERY, { variables: { first } });
+  const { data, refetch } = useQuery(REPOSITORIES_QUERY, { variables: { first } });
   const [addStart] = useMutation(ADD_START, {
-    variables: {
-      starrableId
-    },
-    refetchQueries: [
-      REPOSITORIES_QUERY,
-      'MyRepositories'
-    ]
+    refetchQueries: [ REPOSITORIES_QUERY ]
   });
   const [removeStart] = useMutation(REMOVE_START, {
-    variables: {
-      starrableId: starrableIdRemove
-    },
-    refetchQueries: [
-      REPOSITORIES_QUERY,
-      'MyRepositories'
-    ]
+    refetchQueries: [ REPOSITORIES_QUERY ]
   });
 
-  useEffect(() => {
-    refetch()
-  }, [first]);
+  const memoizedRefetch = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   useEffect(() => {
-    if(starrableId) {
-      addStart();
+    if(first > 1) {
+      memoizedRefetch();
     }
-  }, [starrableId]);
-
-  useEffect(() => {
-    if(starrableIdRemove) {
-      removeStart();
-    }
-  }, [starrableIdRemove]);
+  }, [first, memoizedRefetch]);
 
   return (
     <>
-      {loading ? '' : data.viewer.name}
-      <ul>
-        {data?.viewer?.repositories?.nodes?.map(({ name, stargazers, id }) => (
-          <li>{name} - <span>Starts: {stargazers.totalCount}</span> <button onClick={() => setStarrableId(id)}>add start</button> <button onClick={() => setStarrableIdRemove(id)}>Remove start</button>
-          </li>
+      <section className="list-container">
+        <span>{'Repository name'}</span>
+        <span>{'Starts count'}</span>
+        <span></span>
+        {data?.viewer?.repositories?.nodes?.map(({ name, stargazers, id, viewerHasStarred }) => (
+        <>
+          {name}
+          <span>{stargazers.totalCount}</span>
+          {viewerHasStarred ? <button onClick={() => removeStart({ variables: { starrableId: id } })}>Remove start</button> 
+          : <button onClick={() => addStart({ variables: { starrableId: id } })}>add start</button>}
+        </>
         ))}
-      </ul>
+      </section>
       <button onClick={() => setFirst(first + 1)}>Load more</button>
       <Link to="/">{'Go back home'}</Link>
     </>
