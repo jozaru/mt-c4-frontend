@@ -55,10 +55,10 @@ const REMOVE_START = gql`
 const Projects = () => {
   const [first, setFirst] = useState(1);
   const { data, refetch } = useQuery(REPOSITORIES_QUERY, { variables: { first } });
-  const [addStart] = useMutation(ADD_START, {
+  const [addStar] = useMutation(ADD_START, {
     refetchQueries: [ REPOSITORIES_QUERY ]
   });
-  const [removeStart] = useMutation(REMOVE_START, {
+  const [removeStar] = useMutation(REMOVE_START, {
     refetchQueries: [ REPOSITORIES_QUERY ]
   });
 
@@ -74,21 +74,21 @@ const Projects = () => {
 
   return (
     <>
-      <section className="list-container">
+      <section className="grid" style={{"--bs-columns": 4, "--bs-gap": '10px 0'}}>
         <span>{'Repository name'}</span>
-        <span>{'Starts count'}</span>
-        <span></span>
+        <span className="g-col-3">{'Stars count'}</span>
         {data?.viewer?.repositories?.nodes?.map(({ name, stargazers, id, viewerHasStarred }) => (
         <>
-          {name}
+          <span>{name}</span>
           <span>{stargazers.totalCount}</span>
-          {viewerHasStarred ? <button onClick={() => removeStart({ variables: { starrableId: id } })}>Remove start</button> 
-          : <button onClick={() => addStart({ variables: { starrableId: id } })}>add start</button>}
+          <span className="g-col-2">
+            {viewerHasStarred ? <button class="btn btn-dark" onClick={() => removeStar({ variables: { starrableId: id } })}>Remove star</button> 
+            : <button class="btn btn-dark" onClick={() => addStar({ variables: { starrableId: id } })}>Add star</button>}
+          </span>
         </>
         ))}
       </section>
-      <button onClick={() => setFirst(first + 1)}>Load more</button>
-      <Link to="/">{'Go back home'}</Link>
+      <button class="btn btn-primary" onClick={() => setFirst(first + 1)}>Load more</button>
     </>
   )
 };
