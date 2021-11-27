@@ -6,10 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import {
   ApolloProvider,
   ApolloClient,
-  createHttpLink,
-  InMemoryCache
+  HttpLink,
+  InMemoryCache,
+  from,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { onError } from "@apollo/client/link/error";
 
 // styles
 import 'styles/index.scss';
@@ -17,13 +19,15 @@ import 'styles/index.scss';
 // components
 import App from './App';
 
-const httpLink = createHttpLink({
-  uri: 'https://api.github.com/graphql'
+const httpLink = new HttpLink({
+  // eslint-disable-next-line no-undef
+  uri: process.env.REACT_APP_API_URL
 });
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = process.env.REACT_APP_GITHUB_PERSONAL_TOKEN;
+  // eslint-disable-next-line no-undef
+  const token = process.env.REACT_APP_AUTH_TOKEN;
   // return the headers to the context so httpLink can read them
   return {
     headers: {
@@ -33,8 +37,19 @@ const authLink = setContext((_, { headers }) => {
   }
 });
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+      ),
+    );
+
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: from([authLink, errorLink, httpLink]),
   cache: new InMemoryCache()
 });
 

@@ -1,5 +1,7 @@
 // vendors
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
 
 // styles
 import 'styles/App.scss';
@@ -14,7 +16,7 @@ function App() {
   return (
     <>
       <Menu />
-      <div className="container">
+      <Container>
         <Routes>
           <Route index element={<Home />} />
           <Route path="projects" element={<Projects />} />
@@ -22,7 +24,7 @@ function App() {
             <Route path="signup" element={<SignUp />} />
           </Route>
         </Routes>
-      </div>
+      </Container>
     </>
   );
 }
