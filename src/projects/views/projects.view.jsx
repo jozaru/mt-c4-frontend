@@ -81,13 +81,13 @@ const Projects = () => {
           <span>{name}</span>
           <span>{stargazers.totalCount}</span>
           <span className="g-col-2">
-            {viewerHasStarred ? <button class="btn btn-dark" onClick={() => removeStar({ variables: { starrableId: id } })}>Remove star</button> 
-            : <button class="btn btn-dark" onClick={() => addStar({ variables: { starrableId: id } })}>Add star</button>}
+            {viewerHasStarred ? <button className="btn btn-dark" onClick={() => removeStar({ variables: { starrableId: id } })}>Remove star</button> 
+            : <button className="btn btn-dark" onClick={() => addStar({ variables: { starrableId: id } })}>Add star</button>}
           </span>
         </>
         ))}
       </section>
-      <button class="btn btn-primary" onClick={() => setFirst(first + 1)}>Load more</button>
+      <button className="btn btn-primary" onClick={() => setFirst(first + 1)}>Load more</button>
     </>
   )
 };

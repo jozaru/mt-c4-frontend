@@ -1,6 +1,6 @@
 // vendors
 import React, {useState } from "react";
-import { useMutation, gql } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import Alert from 'react-bootstrap/Alert';
@@ -14,6 +14,15 @@ const REGISTER = gql`
   mutation Register($input: RegisterInput!) {
     register(input: $input) {
       _id
+    }
+  }
+`;
+
+const ROLES = gql `
+  query Query {
+    roles {
+      code
+      value
     }
   }
 `;
@@ -40,6 +49,7 @@ const SignUp = () => {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [register] = useMutation(REGISTER);
+  const { data, loading: loadingRoles } = useQuery(ROLES);
 
   return (
     <Row className="mt-3 justify-content-center">
@@ -126,16 +136,14 @@ const SignUp = () => {
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Label htmlFor="role" className="form-label">Rol</Form.Label>
-              <Form.Group className="mb-3" controlId="formLastName">
+              <Form.Group className="mb-3" controlId="formRole">
                 <Form.Select 
                   name="role"
                   isInvalid={touched.role && !!errors.role}
                   {...getFieldProps('role')}
                 >
                   <option value="">Selecciona el rol</option>
-                  <option value="ADMIN">Administrador</option>
-                  <option value="LEADER">Líder</option>
-                  <option value="STUDENT">Estudiante</option>
+                  {!loadingRoles && data.roles.map(({ code, value}, index) => <option key={index} value={code}>{value}</option>)}
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">
                   {errors.role}
