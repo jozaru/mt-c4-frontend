@@ -11,6 +11,8 @@ import Home from 'home/views/home.view';
 import Projects from 'projects/views/projects.view';
 import SignUp from 'users/views/signup.view';
 import Menu from 'components/menu.component';
+import Users from 'users/views/users.view';
+import Login from 'users/views/login.view';
 
 function App() {
   return (
@@ -21,7 +23,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="projects" element={<Projects />} />
           <Route path="users">
+            <Route index element={<Users />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="login" element={<Login />} />
           </Route>
         </Routes>
       </Container>

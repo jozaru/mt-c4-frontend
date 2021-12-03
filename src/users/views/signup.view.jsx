@@ -55,10 +55,10 @@ const SignUp = () => {
     <Row className="mt-3 justify-content-center">
       <Col lg="5">
         <Alert dismissible variant="danger" onClose={() => setError(false)} show={error}>
-          <p>Error regitrando el usuario</p>
+          Error regitrando el usuario
         </Alert>
         <Alert dismissible variant="success" onClose={() => setSuccess(false)} show={success}>
-          <p>Usuario creado con éxito. Haz click <Link className="alert-link" to="/">aquí</Link> para iniciar session</p>
+          Usuario creado con éxito. Haz click <Link className="alert-link" to="/">aquí</Link> para iniciar session
         </Alert>
         <Formik
           initialValues={initialValues}

@@ -27,23 +27,30 @@ const httpLink = new HttpLink({
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
   // eslint-disable-next-line no-undef
-  const token = process.env.REACT_APP_AUTH_TOKEN;
+  const token = sessionStorage.getItem('token');
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: token ? token : "",
     }
   }
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ),
-    );
+  if (graphQLErrors) {
+    graphQLErrors.forEach(({ message, locations, path, extensions }) => {
+      switch (extensions.code){
+        case 'UNAUTHENTICATED':
+          window.location.href = '/users/login';
+          break;
+        default: 
+          console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+          )
+      }
+    });
+  };
 
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });

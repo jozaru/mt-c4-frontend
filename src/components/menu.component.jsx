@@ -17,6 +17,9 @@ const Menu = () => {
           </ul>
           <ul className="navbar-nav justify-content-end">
             <li className="nav-item">
+              <Link className="nav-link" to="/users/login">{'Ingresa'}</Link>
+            </li>
+            <li className="nav-item">
               <Link className="nav-link" to="/users/signup">{'Regístrate'}</Link>
             </li>
           </ul>
