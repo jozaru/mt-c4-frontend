@@ -44,6 +44,9 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         case 'UNAUTHENTICATED':
           window.location.href = '/users/login';
           break;
+        case 'FORBIDDEN':
+          window.location.href = '/no-access';
+          break;
         default: 
           console.log(
             `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,

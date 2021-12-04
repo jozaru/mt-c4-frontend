@@ -11,10 +11,10 @@ const USERS = gql `
 `;
 
 const Users = () => {
-  const { data } = useQuery(USERS);
+  const { data, loading } = useQuery(USERS);
   console.log(data);
 
-  return <></>
+  return <>{loading ? <></> : 'Usuarios'}</>
 };
 
 export default Users;

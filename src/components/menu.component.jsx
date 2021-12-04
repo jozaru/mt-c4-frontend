@@ -14,6 +14,9 @@ const Menu = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/projects">{'Projectos'}</Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/users">{'Usuarios'}</Link>
+            </li>
           </ul>
           <ul className="navbar-nav justify-content-end">
             <li className="nav-item">
