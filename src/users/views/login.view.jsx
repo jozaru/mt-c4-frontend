@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation, gql } from '@apollo/client';
 import { Formik } from "formik";
 import * as Yup from 'yup';
-import Alert from 'react-bootstrap/Alert';
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Form from 'react-bootstrap/Form';
-import Button from "react-bootstrap/Button";
+import Box from "@mui/material/Box";
+import Collapse from '@mui/material/Collapse';
+import Alert from "@mui/material/Alert";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField'
 
 const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
@@ -32,11 +32,15 @@ const Login = () => {
   const navigate = useNavigate();
 
   return (
-    <Row className="mt-3 justify-content-center">
-      <Col lg="5">
-        <Alert dismissible variant="danger" onClose={() => setError(false)} show={error}>
-          Usuario o clave inválidas
-        </Alert>
+    <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={2}>
+      <Box gridColumn="2 / span 2">
+        <Collapse in={error}>
+          <Alert severity="error" onClose={() => setError(false)} sx={{ mt: 2 }}>
+            Usuario o clave inválidas
+          </Alert>
+        </Collapse>
+      </Box>
+      <Box gridColumn="2 / span 2">
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -60,39 +64,32 @@ const Login = () => {
             errors,
             touched
           }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-              <Form.Group className="mb-3" controlId="formEmail">
-                <Form.Label>Correo</Form.Label>
-                <Form.Control 
-                  name="email" 
-                  type="email" 
-                  placeholder="Ingresa tu correo" 
-                  isInvalid={touched.email && !!errors.email}
-                  {...getFieldProps('email')}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.email}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formtPassword">
-                <Form.Label>Contraseña</Form.Label>
-                <Form.Control 
-                  name="password"
-                  type="password"
-                  placeholder="Contraseña" 
-                  isInvalid={touched.password && !!errors.password}
-                  {...getFieldProps('password')}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.password}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Button type="submit">Ingresar</Button>
-            </Form>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                error={touched.email && !!errors.email}
+                fullWidth
+                helperText={touched.email && errors.email}
+                label="Correo"
+                margin="normal"
+                variant="outlined"
+                {...getFieldProps('email')}
+              />
+              <TextField
+                error={touched.password && !!errors.password}
+                fullWidth
+                helperText={touched.password && errors.password}
+                label="Contraseña"
+                margin="dense"
+                type="password"
+                variant="outlined"
+                {...getFieldProps('password')}
+              />
+              <Button type="submit" variant="contained" sx={{ mt: 1 }} >Ingresar</Button>
+            </form>
           )}
         </Formik>
-      </Col>
-    </Row>
+      </Box>
+    </Box>
   );
 };
 
