@@ -40,7 +40,7 @@ const authLink = setContext((_, { headers }) => {
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message, locations, path, extensions }) => {
-      switch (extensions.code){
+      switch (extensions.code) {
         case 'UNAUTHENTICATED':
           window.location.href = '/users/login';
           break;

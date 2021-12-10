@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import Collapse from '@mui/material/Collapse';
 import Alert from "@mui/material/Alert";
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField'
+import TextField from '@mui/material/TextField';
 
 const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
@@ -18,13 +18,13 @@ const LOGIN = gql`
 
 const initialValues = {
   email: '',
-  password: ''
+  password: '',
 };
 
 const validationSchema = Yup.object({
   email: Yup.string().email('Correo inválido').required('Campo requerido'),
   password: Yup.string().required('Campo requerido'),
-})
+});
 
 const Login = () => {
   const [error, setError] = useState(false);
@@ -44,7 +44,7 @@ const Login = () => {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={(values) => {
+          onSubmit={values => {
             login({
               variables: {
                 ...values,
