@@ -1,6 +1,5 @@
 // vendors
 import React from "react";
-import { Link } from 'react-router-dom';
 
 // assets
 import logo from 'assets/logo.svg';
@@ -20,7 +19,6 @@ const Home = () => {
       >
         Learn React
       </a>
-      <Link to="projects">{'Go to projects'}</Link>
     </>
   );
 };

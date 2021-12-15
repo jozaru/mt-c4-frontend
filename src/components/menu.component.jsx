@@ -28,7 +28,7 @@ const Menu = () => {
             </li>
           </ul>
           <ul className="navbar-nav justify-content-end">
-            {token ? <>Hola, {user?.fullName} <a href="#" onClick={handleCloseSession} className="nav-link">Cerrar sesión</a></> : (
+            {token ? <>Hola, {user?.fullName} <button onClick={handleCloseSession} className="nav-link">Cerrar sesión</button></> : (
               <>
                 <li className="nav-item">
                   <Link className="nav-link" to="/users/login">{'Ingresa'}</Link>
