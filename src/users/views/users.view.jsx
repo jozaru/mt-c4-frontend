@@ -5,16 +5,22 @@ import { useQuery, gql } from '@apollo/client';
 const USERS = gql `
   query AllUsers {
     allUsers {
+      _id
       fullName
+      status
     }
   }
 `;
 
 const Users = () => {
   const { data } = useQuery(USERS);
-  console.log(data);
 
-  return <>{!data ? <></> : 'Usuarios'}</>
+  return <>{!data ? <></> : data?.allUsers?.map(user => (
+    <>
+      <div key={user._id}>{user.fullName}</div>
+      {user.status === 'PENDING' ? <button>Aceptar</button> : <></>}
+    </>
+  ))}</>
 };
 
 export default Users;

@@ -32,7 +32,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? token : "",
+      ...(token ? { authorization: token } : {}),
     }
   }
 });
@@ -42,6 +42,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     graphQLErrors.forEach(({ message, locations, path, extensions }) => {
       switch (extensions.code) {
         case 'UNAUTHENTICATED':
+          sessionStorage.removeItem('token');
           window.location.href = '/users/login';
           break;
         case 'FORBIDDEN':
