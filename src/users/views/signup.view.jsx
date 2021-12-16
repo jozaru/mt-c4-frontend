@@ -3,11 +3,15 @@ import React, {useState } from "react";
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { Formik } from "formik";
 import * as Yup from 'yup';
-import Alert from 'react-bootstrap/Alert';
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Form from 'react-bootstrap/Form';
-import Button from "react-bootstrap/Button";
+import Box from "@mui/material/Box";
+import Collapse from '@mui/material/Collapse';
+import Alert from "@mui/material/Alert";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from "@mui/material/MenuItem";
 import { Link } from 'react-router-dom';
 
 const REGISTER = gql`
@@ -52,14 +56,18 @@ const SignUp = () => {
   const { data, loading: loadingRoles } = useQuery(ROLES);
 
   return (
-    <Row className="mt-3 justify-content-center">
-      <Col lg="5">
-        <Alert dismissible variant="danger" onClose={() => setError(false)} show={error}>
-          Error regitrando el usuario
-        </Alert>
-        <Alert dismissible variant="success" onClose={() => setSuccess(false)} show={success}>
-          Usuario creado con éxito. Haz click <Link className="alert-link" to="/">aquí</Link> para iniciar session
-        </Alert>
+    <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={2}>
+      <Box gridColumn="2 / span 2">
+        <Collapse in={error}>
+          <Alert severity="error" onClose={() => setError(false)} sx={{ mt: 2 }}>
+            Error regitrando el usuario
+          </Alert>
+        </Collapse>
+        <Collapse in={success}>
+          <Alert severity="success" onClose={() => setSuccess(false)} sx={{ mt: 2 }}>
+            Usuario creado con éxito. Haz click <Link className="alert-link" to="/">aquí</Link> para iniciar session
+          </Alert>
+        </Collapse>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -84,90 +92,70 @@ const SignUp = () => {
             errors,
             touched
           }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-              <Form.Group className="mb-3" controlId="formEmail">
-                <Form.Label>Correo</Form.Label>
-                <Form.Control 
-                  name="email" 
-                  type="email" 
-                  placeholder="Ingresa tu correo" 
-                  isInvalid={touched.email && !!errors.email}
-                  {...getFieldProps('email')}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.email}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formDocumentId">
-                <Form.Label>Documento de identidad</Form.Label>
-                <Form.Control 
-                  name="documentId"
-                  type="number"
-                  placeholder="Ingresa tu documento de identidad"
-                  isInvalid={touched.documentId && !!errors.documentId}
-                  {...getFieldProps('documentId')}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.documentId}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formName">
-                <Form.Label>Nombre</Form.Label>
-                <Form.Control
-                  name="name"
-                  placeholder="Ingresa tu nombre"
-                  isInvalid={touched.name && !!errors.name}
-                  {...getFieldProps('name')}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.name}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formLastName">
-                <Form.Label>Apellido</Form.Label>
-                <Form.Control
-                  name="lastName"
-                  placeholder="Ingresa tu apellido" 
-                  isInvalid={touched.lastName && !!errors.lastName}
-                  {...getFieldProps('lastName')}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.lastName}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Label htmlFor="role" className="form-label">Rol</Form.Label>
-              <Form.Group className="mb-3" controlId="formRole">
-                <Form.Select 
-                  name="role"
-                  isInvalid={touched.role && !!errors.role}
+            <form onSubmit={handleSubmit}>
+              <TextField
+                error={touched.email && !!errors.email}
+                fullWidth
+                helperText={touched.email && errors.email}
+                label="Correo"
+                margin="normal"
+                variant="outlined"
+                {...getFieldProps('email')}
+              />
+              <TextField
+                error={touched.documentId && !!errors.documentId}
+                fullWidth
+                helperText={touched.documentId && errors.documentId}
+                label="Documento de identidad"
+                margin="normal"
+                variant="outlined"
+                {...getFieldProps('documentId')}
+              />
+              <TextField
+                error={touched.name && !!errors.name}
+                fullWidth
+                helperText={touched.name && errors.name}
+                label="Nombre"
+                margin="normal"
+                variant="outlined"
+                {...getFieldProps('name')}
+              />
+              <TextField
+                error={touched.lastName && !!errors.lastName}
+                fullWidth
+                helperText={touched.lastName && errors.lastName}
+                label="Apellido"
+                margin="normal"
+                variant="outlined"
+                {...getFieldProps('lastName')}
+              />
+              <FormControl fullWidth sx={{ mt: 2, mb: 1 }}>
+                <InputLabel id="role-label">Rol</InputLabel>
+                <Select
+                  labelId="role-label"
+                  id="role-select"
+                  label="Rol"
                   {...getFieldProps('role')}
                 >
-                  <option value="">Selecciona el rol</option>
-                  {!loadingRoles && data.roles.map(({ code, value}, index) => <option key={index} value={code}>{value}</option>)}
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  {errors.role}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formtPassword">
-                <Form.Label>Contraseña</Form.Label>
-                <Form.Control 
-                  name="password"
-                  type="password"
-                  placeholder="Contraseña" 
-                  isInvalid={touched.password && !!errors.password}
-                  {...getFieldProps('password')}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.password}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Button type="submit">Enviar</Button>
-            </Form>
+                  {!loadingRoles && data.roles.map(({ code, value}, index) => <MenuItem key={index} value={code}>{value}</MenuItem>)}
+                </Select>
+              </FormControl>
+              <TextField
+                error={touched.password && !!errors.password}
+                fullWidth
+                helperText={touched.password && errors.password}
+                label="Contraseña"
+                margin="normal"
+                variant="outlined"
+                type="password"
+                {...getFieldProps('password')}
+              />
+              <Button type="submit" variant="contained" sx={{ mt: 1 }}>Enviar</Button>
+            </form>
           )}
         </Formik>
-      </Col>
-    </Row>
+      </Box>
+    </Box>
   );
 };
 

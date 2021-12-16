@@ -1,7 +1,7 @@
 // vendors
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
+import Container from '@mui/material/Container';
 
 // styles
 import 'styles/App.scss';

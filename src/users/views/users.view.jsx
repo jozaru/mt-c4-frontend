@@ -8,6 +8,7 @@ const USERS = gql `
       _id
       fullName
       status
+      email
     }
   }
 `;
@@ -17,8 +18,11 @@ const Users = () => {
 
   return <>{!data ? <></> : data?.allUsers?.map(user => (
     <>
-      <div key={user._id}>{user.fullName}</div>
-      {user.status === 'PENDING' ? <button>Aceptar</button> : <></>}
+      <div key={user._id}>
+        {user.fullName} -&nbsp;
+        {user.email}&nbsp;
+        {user.status === 'PENDING' ? <button>Aceptar</button> : <></>}
+      </div>
     </>
   ))}</>
 };

@@ -1,18 +1,17 @@
 // vendors
 import React from "react";
-import Alert from 'react-bootstrap/Alert';
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 
 const NoAccess = () => {
   return (
-    <Row className="mt-3 justify-content-center">
-      <Col lg="5">
+    <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={2}>
+      <Box gridColumn="2 / span 2">
         <Alert variant="warning">
           No tienes acceso a este recurso
         </Alert>
-      </Col>
-    </Row>
+      </Box>
+    </Box>
   )
 };
 

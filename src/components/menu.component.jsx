@@ -1,7 +1,12 @@
 // vendors
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
 
 const Menu = () => {
   const token = sessionStorage.getItem('token');
@@ -13,35 +18,51 @@ const Menu = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container">
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link" to="/">{'Inicio'}</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/projects">{'Projectos'}</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/users">{'Usuarios'}</Link>
-            </li>
-          </ul>
-          <ul className="navbar-nav justify-content-end">
-            {token ? <>Hola, {user?.fullName} <button onClick={handleCloseSession} className="nav-link">Cerrar sesión</button></> : (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/users/login">{'Ingresa'}</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/users/signup">{'Regístrate'}</Link>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <AppBar position="static">
+      <Toolbar>
+        <Link 
+          underline="none" 
+          color="inherit" 
+          to="/" 
+          component={RouterLink}
+          sx={{ flexGrow: 1 }}
+        >
+          Inicio
+        </Link>
+        <Link 
+          underline="none" 
+          color="inherit" 
+          to="projects" 
+          component={RouterLink}
+          sx={{ flexGrow: 0.5 }}
+        >
+          Projectos
+        </Link>
+        <Link 
+          underline="none" 
+          color="inherit" 
+          to="users" 
+          component={RouterLink}
+          sx={{ flexGrow: 0.5 }}
+        >
+          Usuarios
+        </Link>
+        <Button 
+          to="users/login" 
+          component={RouterLink}
+          color="inherit"
+        >
+          Login
+        </Button>
+        <Button 
+          to="users/signup" 
+          component={RouterLink}
+          color="inherit"
+        >
+          Regístrate
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 
