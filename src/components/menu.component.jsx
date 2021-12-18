@@ -1,7 +1,6 @@
 // vendors
 import React from "react";
 import { Link as RouterLink } from 'react-router-dom';
-import jwt from 'jsonwebtoken';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Box from "@mui/material/Box";
@@ -9,14 +8,6 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 
 const Menu = () => {
-  const token = sessionStorage.getItem('token');
-  const user = jwt.decode(token)?.user;
-
-  const handleCloseSession = () => {
-    sessionStorage.removeItem('token');
-    window.location.href = '/';
-  };
-
   return (
     <AppBar position="static">
       <Toolbar>
